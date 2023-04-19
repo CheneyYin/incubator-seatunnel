@@ -31,7 +31,7 @@ public enum TestContainerId {
     FLINK_1_15(FLINK, "1.15.3"),
     FLINK_1_16(FLINK, "1.16.0"),
     SPARK_2_4(SPARK, "2.4.6"),
-    SPARK_3_3(SPARK, "3.3.0"),
+    SPARK_3_0(SPARK, "3.0.2"),
     SEATUNNEL(EngineType.SEATUNNEL, "2.2.0");
 
     private final EngineType engineType;

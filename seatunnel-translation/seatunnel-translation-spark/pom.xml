@@ -28,7 +28,7 @@
 
     <modules>
         <module>seatunnel-translation-spark-2.4</module>
-        <module>seatunnel-translation-spark-3.3</module>
+        <module>seatunnel-translation-spark-3.0</module>
     </modules>
 
     <dependencies>

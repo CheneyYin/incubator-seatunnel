@@ -14,27 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.seatunnel.translation.spark.sink.write;
 
 import org.apache.seatunnel.api.sink.SeaTunnelSink;
 import org.apache.seatunnel.api.table.type.SeaTunnelRow;
 
-import org.apache.spark.sql.connector.write.Write;
+import org.apache.spark.sql.connector.write.BatchWrite;
 import org.apache.spark.sql.connector.write.WriteBuilder;
+import org.apache.spark.sql.connector.write.streaming.StreamingWrite;
 
 public class SeaTunnelWriteBuilder<StateT, CommitInfoT, AggregatedCommitInfoT>
         implements WriteBuilder {
 
     private final SeaTunnelSink<SeaTunnelRow, StateT, CommitInfoT, AggregatedCommitInfoT> sink;
+    private final SeaTunnelWrite<AggregatedCommitInfoT, CommitInfoT, StateT> write;
 
     public SeaTunnelWriteBuilder(
             SeaTunnelSink<SeaTunnelRow, StateT, CommitInfoT, AggregatedCommitInfoT> sink) {
         this.sink = sink;
+        this.write = new SeaTunnelWrite<AggregatedCommitInfoT, CommitInfoT, StateT>(sink);
     }
 
     @Override
-    public Write build() {
-        return new SeaTunnelWrite<>(sink);
+    public BatchWrite buildForBatch() {
+        return this.write.toBatch();
+    }
+
+    @Override
+    public StreamingWrite buildForStreaming() {
+        return this.write.toStreaming();
     }
 }
