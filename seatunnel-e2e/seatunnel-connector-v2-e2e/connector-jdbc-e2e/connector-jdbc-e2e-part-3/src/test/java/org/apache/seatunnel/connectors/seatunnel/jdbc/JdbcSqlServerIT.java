@@ -61,7 +61,7 @@ public class JdbcSqlServerIT extends AbstractJdbcIT {
     private static final List<String> CONFIG_FILE =
             Lists.newArrayList("/jdbc_sqlserver_source_to_sink.conf");
     private static final String CREATE_SQL =
-            "CREATE TABLE IF NOT EXISTS %s\n"
+            "CREATE TABLE %s\n"
                     + "    c_bit bit,\n"
                     + "    c_tinyint tinyint,\n"
                     + "    c_smallint smallint,\n"
