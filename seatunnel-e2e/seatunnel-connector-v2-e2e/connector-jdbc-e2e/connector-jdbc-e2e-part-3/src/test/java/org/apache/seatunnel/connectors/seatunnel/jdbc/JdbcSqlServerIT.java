@@ -34,6 +34,7 @@ import org.testcontainers.utility.DockerLoggerFactory;
 import com.google.common.collect.Lists;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,10 +61,33 @@ public class JdbcSqlServerIT extends AbstractJdbcIT {
     private static final List<String> CONFIG_FILE =
             Lists.newArrayList("/jdbc_sqlserver_source_to_sink.conf");
     private static final String CREATE_SQL =
-            "CREATE TABLE %s (\n"
-                    + "  [age] bigint  NOT NULL,\n"
-                    + "  [name] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL\n"
-                    + ")";
+            "CREATE TABLE IF NOT EXISTS %s\n"
+                    + "    c_bit bit,\n"
+                    + "    c_tinyint tinyint,\n"
+                    + "    c_smallint smallint,\n"
+                    + "    c_int int,\n"
+                    + "    c_bigint bigint,\n"
+                    + "    c_decimal decimal(6,3),\n"
+                    + "    c_numeric numeric,\n"
+                    + "    c_float float,\n"
+                    + "    c_real real,\n"
+                    + "    c_smallmoney smallmoney,\n"
+                    + "    c_money money,\n"
+                    + "    c_char char(3),\n"
+                    + "    c_varchar varchar(1000),\n"
+                    + "    c_text text,\n"
+                    + "    c_nchar nchar(3),\n"
+                    + "    c_nvarchar nvarchar(1000),\n"
+                    + "    c_ntext ntext,\n"
+                    + "    c_date date,\n"
+                    + "    c_time time,\n"
+                    + "    c_datetime2 datetime2,\n"
+                    + "    c_datetime datetime,\n"
+                    + "    c_smalldatetime smalldatetime,\n"
+                    + "    c_xml xml,\n"
+                    + "    c_datetimeoffset DATETIMEOFFSET(4),\n"
+                    + "    c_varbinary  varbinary(100)\n"
+                    + ");";
 
     private String username;
 
@@ -116,15 +140,64 @@ public class JdbcSqlServerIT extends AbstractJdbcIT {
     Pair<String[], List<SeaTunnelRow>> initTestData() {
         String[] fieldNames =
                 new String[] {
-                    "age", "name",
+                    "c_bit",
+                    "c_tinyint",
+                    "c_smallint",
+                    "c_int",
+                    "c_bigint",
+                    "c_decimal",
+                    "c_numeric",
+                    "c_float",
+                    "c_real",
+                    "c_smallmoney",
+                    "c_money",
+                    "c_char",
+                    "c_varchar",
+                    "c_text",
+                    "c_nchar",
+                    "c_nvarchar",
+                    "c_ntext",
+                    "c_date",
+                    "c_time",
+                    "c_datetime2",
+                    "c_datetime",
+                    "c_smalldatetime",
+                    "c_xml",
+                    "c_datetimeoffset",
+                    "c_varbinary"
                 };
 
         List<SeaTunnelRow> rows = new ArrayList<>();
+
         for (int i = 0; i < 100; i++) {
             SeaTunnelRow row =
                     new SeaTunnelRow(
                             new Object[] {
-                                i, "f_" + i,
+                                i % 2 == 0 ? (byte) 1 : (byte) 0,
+                                i,
+                                i,
+                                i,
+                                i,
+                                BigDecimal.valueOf(i, 18),
+                                i,
+                                Float.parseFloat("1.1"),
+                                Double.parseDouble("1.1"),
+                                5.323,
+                                6.323,
+                                "f",
+                                String.format("f1_%s", i),
+                                String.format("f1_%s", i),
+                                String.format("f1_%s", i),
+                                String.format("f1_%s", i),
+                                String.format("f1_%s", i),
+                                "2018-07-13",
+                                "10:23:45",
+                                "2018-07-13 11:23:45.34",
+                                "2018-07-13 13:23:45.78",
+                                "2018-07-13 14:23:45",
+                                "<a>b</a>",
+                                "2018-07-13 13:23:45.78+10:00",
+                                "test".getBytes(),
                             });
             rows.add(row);
         }
